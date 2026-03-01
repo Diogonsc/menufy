@@ -99,6 +99,12 @@ export const INITIAL_CONFIG = {
   minOrder: 25,
   deliveryTime: "30–45 min",
   acceptedPaymentMethods: { pix: true, card: true, cash: true },
+  storeName: "",
+  storeDescription: "",
+  storeAddress: "",
+  whatsapp: "",
+  instagram: "",
+  facebook: "",
 }
 
 export type StoreConfigData = typeof INITIAL_CONFIG
@@ -145,6 +151,12 @@ export function loadConfig(): StoreConfigData {
       minOrder: Number(parsed.minOrder) || INITIAL_CONFIG.minOrder,
       deliveryTime: parsed.deliveryTime ?? INITIAL_CONFIG.deliveryTime,
       acceptedPaymentMethods: parsed.acceptedPaymentMethods ?? INITIAL_CONFIG.acceptedPaymentMethods,
+      storeName: parsed.storeName ?? INITIAL_CONFIG.storeName,
+      storeDescription: parsed.storeDescription ?? INITIAL_CONFIG.storeDescription,
+      storeAddress: parsed.storeAddress ?? INITIAL_CONFIG.storeAddress,
+      whatsapp: parsed.whatsapp ?? INITIAL_CONFIG.whatsapp,
+      instagram: parsed.instagram ?? INITIAL_CONFIG.instagram,
+      facebook: parsed.facebook ?? INITIAL_CONFIG.facebook,
     }
   } catch {
     return INITIAL_CONFIG

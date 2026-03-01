@@ -10,11 +10,12 @@ import { Button } from "@/components/ui/button"
 import { formatCurrency } from "../data/constants"
 import type { CartItem } from "../schemas"
 import { CheckoutForm } from "./CheckoutForm"
+import { PixPaymentStep } from "./PixPaymentStep"
 
 interface CartSheetProps {
   open: boolean
   onOpenChange: (open: boolean) => void
-  step: 0 | 1 | 2
+  step: 0 | 1 | 2 | 3
   items: CartItem[]
   subtotal: number
   total: number
@@ -25,6 +26,10 @@ interface CartSheetProps {
   onContinueToCheckout: () => void
   onPlaceOrder: (data: import("../schemas").CheckoutFormValues) => void
   lastOrderId?: string
+  lastOrderTotal?: number
+  lastOrderPayment?: string
+  pixKey?: string
+  onConfirmPixPayment?: () => void
   onTrackOrder: () => void
 }
 
@@ -42,22 +47,30 @@ export const CartSheet = memo(function CartSheet({
   onContinueToCheckout,
   onPlaceOrder,
   lastOrderId,
+  lastOrderTotal = 0,
+  lastOrderPayment,
+  pixKey,
+  onConfirmPixPayment,
   onTrackOrder,
 }: CartSheetProps) {
+  const showPixStep = step === 2 && lastOrderPayment === "pix"
+  const showSuccessStep = step === 3 || (step === 2 && lastOrderPayment !== "pix")
+
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent
         side="bottom"
-        className="flex max-h-[96vh] flex-col rounded-t-3xl"
+        className="flex max-h-[90dvh] flex-col overflow-hidden rounded-t-3xl"
       >
-        <SheetHeader>
+        <SheetHeader className="shrink-0">
           <SheetTitle className="font-serif text-lg font-extrabold">
             {step === 0 && "🛒 Carrinho"}
             {step === 1 && "📋 Dados para entrega"}
-            {step === 2 && "Pedido realizado"}
+            {showPixStep && "📱 Pagamento PIX"}
+            {showSuccessStep && "Pedido realizado"}
           </SheetTitle>
         </SheetHeader>
-        <div className="flex flex-1 flex-col overflow-hidden">
+        <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
           {step === 0 && (
             <>
               {items.length === 0 ? (
@@ -110,7 +123,7 @@ export const CartSheet = memo(function CartSheet({
             </>
           )}
           {step === 1 && (
-            <div className="flex-1 overflow-y-auto">
+            <div className="min-h-0 flex-1 overflow-y-auto">
               <CheckoutForm
                 cartItems={items}
                 cartTotal={total}
@@ -119,7 +132,15 @@ export const CartSheet = memo(function CartSheet({
               />
             </div>
           )}
-          {step === 2 && lastOrderId && (
+          {showPixStep && lastOrderId && onConfirmPixPayment && (
+            <PixPaymentStep
+              orderId={lastOrderId}
+              total={lastOrderTotal}
+              pixKey={pixKey}
+              onConfirm={onConfirmPixPayment}
+            />
+          )}
+          {showSuccessStep && lastOrderId && (
             <div className="flex flex-1 flex-col items-center justify-center gap-4 py-12 text-center">
               <span className="text-6xl animate-in zoom-in duration-300">🎉</span>
               <h3 className="font-serif text-2xl font-extrabold text-foreground">

@@ -1,5 +1,5 @@
 import { memo, useCallback, useRef, useState } from "react"
-import { FiSave, FiKey, FiClock, FiPackage, FiImage, FiCreditCard, FiUpload } from "react-icons/fi"
+import { FiSave, FiKey, FiClock, FiPackage, FiImage, FiCreditCard, FiUpload, FiInfo, FiMapPin, FiMessageCircle } from "react-icons/fi"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import {
@@ -266,6 +266,98 @@ export const SettingsPage = memo(function SettingsPage() {
                 </Button>
               </form>
             </Form>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="p-6">
+            <div className="mb-6 flex items-center gap-2">
+              <FiInfo className="size-5 text-primary" />
+              <h2 className="font-semibold text-foreground">Informações da loja</h2>
+            </div>
+            <p className="mb-6 text-sm text-muted-foreground">
+              Nome, descrição, endereço e redes sociais exibidos no modal de informações para o cliente.
+            </p>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault()
+                const formData = new FormData(e.currentTarget)
+                update({
+                  storeName: (formData.get("storeName") as string) || "",
+                  storeDescription: (formData.get("storeDescription") as string) || "",
+                  storeAddress: (formData.get("storeAddress") as string) || "",
+                  whatsapp: (formData.get("whatsapp") as string) || "",
+                  instagram: (formData.get("instagram") as string) || "",
+                  facebook: (formData.get("facebook") as string) || "",
+                })
+              }}
+              className="space-y-4"
+            >
+              <div className="space-y-2">
+                <Label className="text-muted-foreground">Nome da loja</Label>
+                <Input
+                  name="storeName"
+                  placeholder="Ex: Boi Burguer"
+                  defaultValue={config.storeName ?? ""}
+                  className="w-full"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label className="text-muted-foreground">Descrição / slogan</Label>
+                <Input
+                  name="storeDescription"
+                  placeholder="Ex: Hambúrgueres artesanais na sua porta"
+                  defaultValue={config.storeDescription ?? ""}
+                  className="w-full"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label className="flex items-center gap-1.5 text-muted-foreground">
+                  <FiMapPin className="size-3.5" />
+                  Endereço da loja
+                </Label>
+                <Input
+                  name="storeAddress"
+                  placeholder="Rua, número, bairro, cidade"
+                  defaultValue={config.storeAddress ?? ""}
+                  className="w-full"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label className="flex items-center gap-1.5 text-muted-foreground">
+                  <FiMessageCircle className="size-3.5" />
+                  WhatsApp (com DDD, só números ou com formatação)
+                </Label>
+                <Input
+                  name="whatsapp"
+                  placeholder="(11) 99999-0000"
+                  defaultValue={config.whatsapp ?? ""}
+                  className="w-full"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label className="text-muted-foreground">Instagram (@usuario ou link)</Label>
+                <Input
+                  name="instagram"
+                  placeholder="@minhaloja ou https://instagram.com/minhaloja"
+                  defaultValue={config.instagram ?? ""}
+                  className="w-full"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label className="text-muted-foreground">Facebook (link ou nome da página)</Label>
+                <Input
+                  name="facebook"
+                  placeholder="https://facebook.com/minhaloja"
+                  defaultValue={config.facebook ?? ""}
+                  className="w-full"
+                />
+              </div>
+              <Button type="submit">
+                <FiSave className="mr-2 size-4" />
+                Salvar informações
+              </Button>
+            </form>
           </CardContent>
         </Card>
 

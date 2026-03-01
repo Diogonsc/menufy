@@ -17,7 +17,7 @@ export const BottomNav = memo(function BottomNav({
   onOpenCart,
 }: BottomNavProps) {
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-40 flex border-t bg-background pb-[env(safe-area-inset-bottom)]">
+    <nav className="fixed bottom-0 left-0 right-0 z-40 flex border-t bg-background pt-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
       <Button
         type="button"
         variant="ghost"

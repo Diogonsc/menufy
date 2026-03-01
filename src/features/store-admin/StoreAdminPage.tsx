@@ -1,4 +1,5 @@
 import { useCallback, useState } from "react"
+import { useNavigate, useParams } from "react-router-dom"
 import { AdminLayout, type AdminTab } from "./components/AdminLayout"
 import { DashboardPage } from "./components/DashboardPage"
 import { AnalyticsPage } from "./components/AnalyticsPage"
@@ -7,14 +8,15 @@ import { ProductsPage } from "./components/ProductsPage"
 import { OrdersPage } from "./components/OrdersPage"
 import { SettingsPage } from "./components/SettingsPage"
 
-interface StoreAdminPageProps {
-  onOpenStore?: () => void
-}
-
-export default function StoreAdminPage({ onOpenStore }: StoreAdminPageProps) {
+export default function StoreAdminPage() {
+  const { storeSlug } = useParams<{ storeSlug: string }>()
+  const navigate = useNavigate()
   const [tab, setTab] = useState<AdminTab>("dashboard")
 
   const handleTabChange = useCallback((t: AdminTab) => setTab(t), [])
+  const onOpenStore = useCallback(() => {
+    if (storeSlug) navigate(`/${storeSlug}`)
+  }, [storeSlug, navigate])
 
   const renderContent = () => {
     switch (tab) {
@@ -36,7 +38,7 @@ export default function StoreAdminPage({ onOpenStore }: StoreAdminPageProps) {
   }
 
   return (
-    <AdminLayout tab={tab} onTabChange={handleTabChange} onOpenStore={onOpenStore}>
+    <AdminLayout tab={tab} onTabChange={handleTabChange} onOpenStore={storeSlug ? onOpenStore : undefined}>
       {renderContent()}
     </AdminLayout>
   )

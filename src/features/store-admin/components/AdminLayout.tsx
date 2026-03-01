@@ -43,8 +43,9 @@ export const AdminLayout = memo(function AdminLayout({
   onOpenStore,
 }: AdminLayoutProps) {
   return (
-    <div className="flex min-h-screen bg-muted/30">
-      <aside className="fixed inset-y-0 left-0 z-40 w-64 border-r bg-background">
+    <div className="flex min-h-screen flex-col bg-muted/30">
+      {/* Sidebar: desktop (md+) */}
+      <aside className="fixed inset-y-0 left-0 z-40 hidden w-64 border-r bg-background md:block">
         <div className="flex h-14 items-center gap-2 border-b px-4">
           <FiGrid className="size-6 text-primary" />
           <span className="font-serif text-lg font-extrabold">Painel Admin</span>
@@ -78,7 +79,48 @@ export const AdminLayout = memo(function AdminLayout({
           )}
         </nav>
       </aside>
-      <main className="ml-64 flex-1 p-6">{children}</main>
+
+      {/* Header: mobile only */}
+      <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b bg-background px-4 md:hidden">
+        <div className="flex items-center gap-2">
+          <FiGrid className="size-6 text-primary" />
+          <span className="font-serif text-lg font-extrabold">Painel Admin</span>
+        </div>
+        {onOpenStore && (
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={onOpenStore}
+            className="gap-1.5"
+          >
+            <FiExternalLink className="size-4" />
+            Ver loja
+          </Button>
+        )}
+      </header>
+
+      {/* Main content */}
+      <main className="flex-1 p-4 pb-20 md:ml-64 md:pb-6 md:p-6">{children}</main>
+
+      {/* Bottom nav: mobile only */}
+      <nav className="fixed bottom-0 left-0 right-0 z-40 flex border-t bg-background pt-2 pb-[calc(0.5rem+env(safe-area-inset-bottom))] md:hidden">
+        {NAV_ITEMS.map(({ id, icon: Icon, label }) => (
+          <Button
+            key={id}
+            type="button"
+            variant="ghost"
+            onClick={() => onTabChange(id)}
+            className={cn(
+              "flex flex-1 flex-col items-center gap-0.5 rounded-none py-2 transition-colors",
+              tab === id ? "text-primary font-semibold" : "text-muted-foreground"
+            )}
+          >
+            <Icon className="size-5 shrink-0" />
+            <span className="text-[10px] font-medium">{label}</span>
+          </Button>
+        ))}
+      </nav>
     </div>
   )
 })

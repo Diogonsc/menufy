@@ -90,6 +90,12 @@ export const storeConfigSchema = z.object({
       cash: z.boolean().optional(),
     })
     .optional(),
+  storeName: z.string().optional(),
+  storeDescription: z.string().optional(),
+  storeAddress: z.string().optional(),
+  whatsapp: z.string().optional(),
+  instagram: z.string().optional(),
+  facebook: z.string().optional(),
 })
 
 export type DayKey = "monday" | "tuesday" | "wednesday" | "thursday" | "friday" | "saturday" | "sunday"

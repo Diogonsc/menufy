@@ -18,7 +18,7 @@ export default function DeliveryStorePage() {
   const [activeCategoryId, setActiveCategoryId] = useState<number | null>(null)
   const [productModal, setProductModal] = useState<Product | null>(null)
   const [cartOpen, setCartOpen] = useState(false)
-  const [cartStep, setCartStep] = useState<0 | 1 | 2>(0)
+  const [cartStep, setCartStep] = useState<0 | 1 | 2 | 3>(0)
   const [trackId, setTrackId] = useState("")
   const [lastOrder, setLastOrder] = useState<Order | null>(null)
   const [toast, setToast] = useState<string | null>(null)
@@ -92,10 +92,12 @@ export default function DeliveryStorePage() {
       setLastOrder(order)
       setTrackId(order.id)
       cart.clearCart()
-      setCartStep(2)
+      setCartStep(data.payment === "pix" ? 2 : 3)
     },
     [cart, meetsMinOrder, cartTotal, status, orders.addOrder, cart.clearCart]
   )
+
+  const handleConfirmPixPayment = useCallback(() => setCartStep(3), [])
 
   const handleTrackOrder = useCallback(() => {
     setCartOpen(false)
@@ -182,6 +184,10 @@ export default function DeliveryStorePage() {
         onContinueToCheckout={handleContinueToCheckout}
         onPlaceOrder={handlePlaceOrder}
         lastOrderId={lastOrder?.id}
+        lastOrderTotal={lastOrder?.total}
+        lastOrderPayment={lastOrder?.payment}
+        pixKey={config?.pixKey}
+        onConfirmPixPayment={handleConfirmPixPayment}
         onTrackOrder={handleTrackOrder}
       />
 

@@ -1,8 +1,12 @@
 import type { Product } from "../schemas"
 
+/** Slug da loja na URL (ex: /boi-burguer, /boi-burguer/paineladmin) */
+export const DEFAULT_STORE_SLUG = "boi-burguer"
+
 export const STORE = {
   name: "Boi Burguer",
   tagline: "Hambúrgueres artesanais quentinhos na sua porta",
+  address: "Rua das Flores, 123 - Centro, São Paulo - SP",
   banner: "https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?w=1200&h=400&fit=crop",
   avatar: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=200&h=200&fit=crop",
   whatsapp: "(11) 99999-0000",
